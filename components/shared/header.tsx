@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import React from "react";
-import { Container } from "./index";
+import { Container, SearchInput } from "./index";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui";
@@ -26,6 +26,10 @@ export const Header: React.FC<Props> = ({ className }) => {
             </div>
           </div>
         </Link>
+
+        <div className="mx-10 flex-1">
+          <SearchInput />
+        </div>
 
         {/* Правая часть */}
         <div className="flex items-center gap-3">
