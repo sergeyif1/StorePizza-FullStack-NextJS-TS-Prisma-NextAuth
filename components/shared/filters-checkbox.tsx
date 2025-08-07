@@ -14,13 +14,13 @@ export const FilterCheckbox: React.FC<FilterCheckboxProps> = ({
   value,
   endAdornment,
   onCheckedChange,
-  // checked,
+  checked,
 }) => {
   return (
     <div className="flex item-centr space-x-2">
       <Checkbox
         onCheckedChange={onCheckedChange}
-        checked
+        checked={checked}
         value={value}
         className="rounded-[8px] w-6 h-6"
         id={`checkbox-${String(value)}`}
