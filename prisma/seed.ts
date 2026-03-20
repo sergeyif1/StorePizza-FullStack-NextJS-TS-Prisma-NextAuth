@@ -60,7 +60,7 @@ async function up() {
   const pizza1 = await prisma.product.create({
     data: {
       name: "Пепперони фреш",
-      imageUrl: "/public/1325588gfgfd.jpg",
+      imageUrl: "/1325588gfgfd.jpg",
       categoryId: 1,
       ingredients: {
         connect: ingredients.slice(0, 5),
@@ -70,8 +70,8 @@ async function up() {
 
   const pizza2 = await prisma.product.create({
     data: {
-      name: "Пепперони фреш",
-      imageUrl: "/public/1325588gfgfd.jpg",
+      name: "Терияки",
+      imageUrl: "/tirijaki.avif",
       categoryId: 1,
       ingredients: {
         connect: ingredients.slice(5, 10),
@@ -81,8 +81,85 @@ async function up() {
 
   const pizza3 = await prisma.product.create({
     data: {
-      name: "Пепперони фреш",
-      imageUrl: "/public/1325588gfgfd.jpg",
+      name: "Чесночный цыпленок",
+      imageUrl: "/Chesnochiy_Ziplenok.avif",
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(10, 40),
+      },
+    },
+  });
+
+  const pizza4 = await prisma.product.create({
+    data: {
+      name: "Пикантные колбаски",
+      imageUrl: "/Pikant_kolbaski.avif",
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(10, 40),
+      },
+    },
+  });
+
+  const pizza5 = await prisma.product.create({
+    data: {
+      name: "Четыре сыра",
+      imageUrl: "/4_cheeses.avif",
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(10, 40),
+      },
+    },
+  });
+
+  const pizza6 = await prisma.product.create({
+    data: {
+      name: "Ветчина и сыр",
+      imageUrl: "/ham_and_chees.avif",
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(10, 40),
+      },
+    },
+  });
+
+  const pizza7 = await prisma.product.create({
+    data: {
+      name: "Чилл Грилл",
+      imageUrl: "/Cheel_Greel.avif",
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(10, 40),
+      },
+    },
+  });
+
+  const pizza8 = await prisma.product.create({
+    data: {
+      name: "Креветка и песто",
+      imageUrl: "/Креветка_и_песто.avif",
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(10, 40),
+      },
+    },
+  });
+
+  const pizza9 = await prisma.product.create({
+    data: {
+      name: "Карбонара",
+      imageUrl: "/Карбонара.avif",
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients.slice(10, 40),
+      },
+    },
+  });
+
+  const pizza10 = await prisma.product.create({
+    data: {
+      name: "Мясная",
+      imageUrl: "/Мясная.avif",
       categoryId: 1,
       ingredients: {
         connect: ingredients.slice(10, 40),
@@ -109,6 +186,34 @@ async function up() {
       generateProductItem({ productId: pizza3.id, pizzaType: 1, size: 20 }),
       generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 30 }),
       generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 40 }),
+
+      generateProductItem({ productId: pizza4.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza4.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza4.id, pizzaType: 2, size: 40 }),
+
+      generateProductItem({ productId: pizza5.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza5.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza5.id, pizzaType: 2, size: 40 }),
+
+      generateProductItem({ productId: pizza6.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza6.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza6.id, pizzaType: 2, size: 40 }),
+
+      generateProductItem({ productId: pizza7.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza7.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza7.id, pizzaType: 2, size: 40 }),
+
+      generateProductItem({ productId: pizza8.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza8.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza8.id, pizzaType: 2, size: 40 }),
+
+      generateProductItem({ productId: pizza9.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza9.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza9.id, pizzaType: 2, size: 40 }),
+
+      generateProductItem({ productId: pizza10.id, pizzaType: 1, size: 20 }),
+      generateProductItem({ productId: pizza10.id, pizzaType: 2, size: 30 }),
+      generateProductItem({ productId: pizza10.id, pizzaType: 2, size: 40 }),
 
       // Остальные продукты
       generateProductItem({ productId: 1 }),
@@ -152,11 +257,7 @@ async function up() {
       cartId: 1,
       quantity: 2,
       Ingredient: {
-        connect: [
-          { id: 1 },
-          { id: 2 },
-          { id: 3 }
-        ],
+        connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
       },
     },
   });
@@ -194,4 +295,3 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
-
