@@ -44,7 +44,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
   const [type, setType] = React.useState<PizzaType>(1);
 
   const [selectedIngredients, { toggle: addIngredient }] = useSet(
-    new Set<number>([])
+    new Set<number>([]),
   );
 
   const totalPrice = calcTotalPizzaPrice(
@@ -52,7 +52,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
     size,
     items || [],
     ingredients,
-    selectedIngredients
+    selectedIngredients,
   );
 
   const textDetaills = `${size} см, ${mapPizzaType[type]} пицца`;
@@ -96,7 +96,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
         </div>
 
         <Button className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
-          Добавить в корзину за {totalPrice} ₽
+          Добавить в корзину за {totalPrice} ₴
         </Button>
       </div>
     </div>

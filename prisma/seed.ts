@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { hashSync } from "bcrypt";
-import { categories, ingredients, products } from "./constants";
+import { categories, _ingredients, products } from "./constants";
 
 const prisma = new PrismaClient();
 
@@ -50,7 +50,7 @@ async function up() {
   });
 
   await prisma.ingredient.createMany({
-    data: ingredients,
+    data: _,
   });
 
   await prisma.product.createMany({
@@ -62,8 +62,8 @@ async function up() {
       name: "Пепперони фреш",
       imageUrl: "/1325588gfgfd.jpg",
       categoryId: 1,
-      ingredients: {
-        connect: ingredients.slice(0, 5),
+      _: {
+        connect: _.slice(0, 5),
       },
     },
   });
@@ -73,8 +73,8 @@ async function up() {
       name: "Терияки",
       imageUrl: "/tirijaki.avif",
       categoryId: 1,
-      ingredients: {
-        connect: ingredients.slice(5, 10),
+      _: {
+        connect: _.slice(5, 10),
       },
     },
   });
@@ -84,8 +84,8 @@ async function up() {
       name: "Чесночный цыпленок",
       imageUrl: "/Chesnochiy_Ziplenok.avif",
       categoryId: 1,
-      ingredients: {
-        connect: ingredients.slice(10, 40),
+      _: {
+        connect: _.slice(10, 40),
       },
     },
   });
@@ -95,8 +95,8 @@ async function up() {
       name: "Пикантные колбаски",
       imageUrl: "/Pikant_kolbaski.avif",
       categoryId: 1,
-      ingredients: {
-        connect: ingredients.slice(10, 40),
+      _: {
+        connect: _.slice(10, 40),
       },
     },
   });
@@ -107,7 +107,7 @@ async function up() {
       imageUrl: "/4_cheeses.avif",
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(10, 40),
+        connect: _ingredients.slice(10, 40),
       },
     },
   });
@@ -118,7 +118,7 @@ async function up() {
       imageUrl: "/ham_and_chees.avif",
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(10, 40),
+        connect: _ingredients.slice(10, 40),
       },
     },
   });
@@ -129,7 +129,7 @@ async function up() {
       imageUrl: "/Cheel_Greel.avif",
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(10, 40),
+        connect: _ingredients.slice(10, 40),
       },
     },
   });
@@ -140,7 +140,7 @@ async function up() {
       imageUrl: "/Креветка_и_песто.avif",
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(10, 40),
+        connect: _ingredients.slice(10, 40),
       },
     },
   });
@@ -151,7 +151,7 @@ async function up() {
       imageUrl: "/Карбонара.avif",
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(10, 40),
+        connect: _ingredients.slice(10, 40),
       },
     },
   });
@@ -162,7 +162,7 @@ async function up() {
       imageUrl: "/Мясная.avif",
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(10, 40),
+        connect: _ingredients.slice(10, 40),
       },
     },
   });
