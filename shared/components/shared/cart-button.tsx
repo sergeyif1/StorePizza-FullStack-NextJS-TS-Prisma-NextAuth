@@ -6,18 +6,16 @@ import React from "react";
 import { Button } from "../ui/button";
 import { ArrowRight, ShoppingCart } from "lucide-react";
 import { CartDrawer } from "./cart-drawer";
-// import { useCartStore } from "@/shared/store";
+import { useCartStore } from "@/shared/store";
 
 interface Props {
   className?: string;
 }
 
 export const CartButton: React.FC<Props> = ({ className }) => {
-  // const [totalAmount, items, loading] = useCartStore((state) => [
-  //   state.totalAmount,
-  //   state.items,
-  //   state.loading,
-  // ]);
+  const totalAmount = useCartStore((state) => state.totalAmount);
+  const items = useCartStore((state) => state.items);
+  const loading = useCartStore((state) => state.loading);
 
   return (
     <CartDrawer>

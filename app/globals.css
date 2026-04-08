@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
 
 html {
   scroll-behavior: smooth;
@@ -44,10 +48,6 @@ html {
   }
 }
 
-* {
-  font-family: var(--font-nunito), sans-serif;
-}
-
 .scrollbar::-webkit-scrollbar {
   width: 4px;
 }
@@ -72,25 +72,14 @@ html {
   }
 }
 
-/* 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+body {
+  font-family: 'Nunito', sans-serif;
 }
 
-#nprogress .bar {
-  @apply bg-primary !important;
+/* :root {
+  --font-nunito: 'Nunito', sans-serif;
 }
 
-#nprogress .peg {
-  @apply shadow-md shadow-primary !important;
-}
-
-#nprogress .spinner-icon {
-  @apply border-t-primary border-l-primary !important;
-} 
-*/
+body {
+  font-family: var(--font-nunito), sans-serif;
+} */
