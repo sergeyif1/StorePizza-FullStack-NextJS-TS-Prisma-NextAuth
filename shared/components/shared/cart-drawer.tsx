@@ -10,7 +10,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  // SheetDescription,
+  SheetDescription,
 } from "@/shared/components/ui/sheet";
 
 import Link from "next/link";
@@ -30,13 +30,38 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   className,
 }) => {
+  // const [
+  //   totalAmount,
+  //   items,
+  //   fetchCartItems,
+  //   updateItemQuantity,
+  //   removeCartItem,
+  // ] = useCartStore((state) => [
+  //   state.totalAmount,
+  //   state.items,
+  //   state.fetchCartItems,
+  //   state.updateItemQuantity,
+  //   state.removeCartItem,
+  // ]);
+
   const totalAmount = useCartStore((state) => state.totalAmount);
   const items = useCartStore((state) => state.items);
   const fetchCartItems = useCartStore((state) => state.fetchCartItems);
+  const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
+  const removeCartItem = useCartStore((state) => state.removeCartItem);
 
   React.useEffect(() => {
     fetchCartItems();
-  }, []);
+  }, [fetchCartItems]);
+
+  const onClickCountButton = (
+    id: number,
+    quantity: number,
+    type: "plus" | "minus",
+  ) => {
+    const newQuantity = type === "plus" ? quantity + 1 : quantity - 1;
+    updateItemQuantity(id, newQuantity);
+  };
 
   return (
     <Sheet>
@@ -47,11 +72,15 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
           <SheetTitle>
             В корзине <span className="font-bold">{items.length} товара</span>
           </SheetTitle>
+
+          <SheetDescription className="sr-only">
+            Список товаров в корзине, изменение количества и оформление заказа
+          </SheetDescription>
         </SheetHeader>
 
         <div className="mz-6 mt-5 overflow-auto scrollbar flex-1">
-          <div className="mb-2">
-            {items.map((item) => (
+          {items.map((item) => (
+            <div key={item.id} className="mb-2">
               <CartDrawerItem
                 key={item.id}
                 id={item.id}
@@ -68,9 +97,13 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({
                 name={item.name}
                 price={item.price}
                 quantity={item.quantity}
+                onClickCountButton={(type) =>
+                  onClickCountButton(item.id, item.quantity, type)
+                }
+                onClickRemove={() => removeCartItem(item.id)}
               />
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
         {/* Items*/}

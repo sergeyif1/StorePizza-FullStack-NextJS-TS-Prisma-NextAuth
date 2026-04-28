@@ -2,7 +2,12 @@
 
 import { Header } from "@/shared/components/shared";
 
-export default function ClientLayoutShell({ children, modal }) {
+interface Props {
+  children: React.ReactNode;
+  modal?: React.ReactNode;
+}
+
+export default function ClientLayoutShell({ children, modal }: Props) {
   return (
     <>
       <Header />

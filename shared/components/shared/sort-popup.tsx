@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { cn } from "@/shared/lib/utils";
 import { ArrowUpDown } from "lucide-react";
@@ -11,7 +13,7 @@ export const SortPopup: React.FC<Props> = ({ className }) => {
     <div
       className={cn(
         "inline-flex item-center gap-1 bg-gray-50 px5 h-[52px] raunded-2x1 cursor-pointer",
-        className
+        className,
       )}>
       <ArrowUpDown className="w-4 h-4" />
       <b>Сортировка</b>

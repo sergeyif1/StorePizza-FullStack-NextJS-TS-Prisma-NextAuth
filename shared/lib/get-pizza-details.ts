@@ -12,7 +12,7 @@ export const getPizzaDetails = (
   const totalPrice = calcTotalPizzaPrice(
     type,
     size,
-    items,
+    items ?? [],
     ingredients,
     selectedIngredients,
   );
