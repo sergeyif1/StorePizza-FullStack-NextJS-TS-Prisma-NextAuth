@@ -1,10 +1,9 @@
 import { ProductItem } from "@prisma/client";
 import { PizzaType, pizzaSizes } from "../constants/pizza";
-// import { Variant } from '../components/shared/group-variants';
 
 export const getAvailablePizzaSizes = (
   type: PizzaType,
-  items: ProductItem[]
+  items: ProductItem[] = [],
 ) => {
   const filteredPizzasByType = items.filter((item) => item.pizzaType === type);
 
@@ -12,7 +11,7 @@ export const getAvailablePizzaSizes = (
     name: item.name,
     value: item.value,
     disabled: !filteredPizzasByType.some(
-      (pizza) => Number(pizza.size) === Number(item.value)
+      (pizza) => Number(pizza.size) === Number(item.value),
     ),
   }));
 };

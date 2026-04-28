@@ -1,7 +1,7 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { hashSync } from "bcrypt";
 import { categories, _ingredients, products } from "./constants";
-
+const bcrypt = require("bcrypt");
 const prisma = new PrismaClient();
 
 const randomDecimalNumber = (min: number, max: number) => {
@@ -22,7 +22,7 @@ const generateProductItem = ({
     price: randomDecimalNumber(190, 600),
     pizzaType,
     size,
-  } as Prisma.ProductItemUncheckedCreateInput;
+  };
 };
 
 async function up() {
@@ -50,7 +50,7 @@ async function up() {
   });
 
   await prisma.ingredient.createMany({
-    data: _,
+    data: _ingredients,
   });
 
   await prisma.product.createMany({
@@ -62,8 +62,10 @@ async function up() {
       name: "Пепперони фреш",
       imageUrl: "/1325588gfgfd.jpg",
       categoryId: 1,
-      _: {
-        connect: _.slice(0, 5),
+      ingredients: {
+        connect: _ingredients.slice(0, 5).map((item) => ({
+          id: item.id,
+        })),
       },
     },
   });
@@ -73,8 +75,10 @@ async function up() {
       name: "Терияки",
       imageUrl: "/tirijaki.avif",
       categoryId: 1,
-      _: {
-        connect: _.slice(5, 10),
+      ingredients: {
+        connect: _ingredients.slice(0, 5).map((item) => ({
+          id: item.id,
+        })),
       },
     },
   });
@@ -84,8 +88,10 @@ async function up() {
       name: "Чесночный цыпленок",
       imageUrl: "/Chesnochiy_Ziplenok.avif",
       categoryId: 1,
-      _: {
-        connect: _.slice(10, 40),
+      ingredients: {
+        connect: _ingredients.slice(0, 5).map((item) => ({
+          id: item.id,
+        })),
       },
     },
   });
@@ -95,8 +101,10 @@ async function up() {
       name: "Пикантные колбаски",
       imageUrl: "/Pikant_kolbaski.avif",
       categoryId: 1,
-      _: {
-        connect: _.slice(10, 40),
+      ingredients: {
+        connect: _ingredients.slice(0, 5).map((item) => ({
+          id: item.id,
+        })),
       },
     },
   });
@@ -256,7 +264,7 @@ async function up() {
       productItemId: 1,
       cartId: 1,
       quantity: 2,
-      Ingredient: {
+      ingredients: {
         connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
       },
     },

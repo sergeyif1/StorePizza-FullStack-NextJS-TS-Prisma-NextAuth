@@ -8,7 +8,9 @@ import { Filters } from "./use-filters";
 export const useQueryFilters = (filters: Filters) => {
   const router = useRouter();
 
-  React.useEffect(() => {
+  const query = React.useMemo(() => {
+    if (!filters) return "";
+
     const params = {
       ...filters.prices,
       pizzaTypes: Array.from(filters.pizzaTypes),
@@ -16,12 +18,40 @@ export const useQueryFilters = (filters: Filters) => {
       ingredients: Array.from(filters.selectedIngredients),
     };
 
-    const query = qs.stringify(params, {
+    return qs.stringify(params, {
       arrayFormat: "brackets",
     });
+  }, [
+    filters?.prices,
+    filters?.pizzaTypes,
+    filters?.sizes,
+    filters?.selectedIngredients,
+  ]);
 
-    router.replace(`?${query}`, {
-      scroll: false,
-    });
-  }, [filters, router]);
+  React.useEffect(() => {
+    if (!query) return;
+
+    router.replace(`?${query}`, { scroll: false });
+  }, [query, router]);
 };
+
+// export const useQueryFilters = (filters: Filters) => {
+//   const router = useRouter();
+
+//   React.useEffect(() => {
+//     const params = {
+//       ...filters.prices,
+//       pizzaTypes: Array.from(filters.pizzaTypes),
+//       sizes: Array.from(filters.sizes),
+//       ingredients: Array.from(filters.selectedIngredients),
+//     };
+
+//     const query = qs.stringify(params, {
+//       arrayFormat: "brackets",
+//     });
+
+//     router.replace(`?${query}`, {
+//       scroll: false,
+//     });
+//   }, [filters, router]);
+// };

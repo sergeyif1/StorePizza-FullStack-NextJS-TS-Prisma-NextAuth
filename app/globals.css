@@ -5,12 +5,12 @@
 @tailwind utilities;
 
 
-
 html {
   scroll-behavior: smooth;
 }
 
-@media screen and (prefers-reduced-motion: reduce) {
+
+@media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
@@ -48,6 +48,11 @@ html {
   }
 }
 
+body {
+  font-family: 'Nunito', sans-serif;
+}
+
+/* scrollbar */
 .scrollbar::-webkit-scrollbar {
   width: 4px;
 }
@@ -71,15 +76,3 @@ html {
     text-wrap: balance;
   }
 }
-
-body {
-  font-family: 'Nunito', sans-serif;
-}
-
-/* :root {
-  --font-nunito: 'Nunito', sans-serif;
-}
-
-body {
-  font-family: var(--font-nunito), sans-serif;
-} */
