@@ -89,7 +89,7 @@ async function up() {
       imageUrl: "/Chesnochiy_Ziplenok.avif",
       categoryId: 1,
       ingredients: {
-        connect: _ingredients.slice(0, 5).map((item) => ({
+        connect: _ingredients.slice(0, 3).map((item) => ({
           id: item.id,
         })),
       },
@@ -102,7 +102,7 @@ async function up() {
       imageUrl: "/Pikant_kolbaski.avif",
       categoryId: 1,
       ingredients: {
-        connect: _ingredients.slice(0, 5).map((item) => ({
+        connect: _ingredients.slice(2, 4).map((item) => ({
           id: item.id,
         })),
       },
@@ -115,7 +115,7 @@ async function up() {
       imageUrl: "/4_cheeses.avif",
       categoryId: 1,
       ingredients: {
-        connect: _ingredients.slice(10, 40),
+        connect: _ingredients.slice(5, 20),
       },
     },
   });
@@ -137,7 +137,7 @@ async function up() {
       imageUrl: "/Cheel_Greel.avif",
       categoryId: 1,
       ingredients: {
-        connect: _ingredients.slice(10, 40),
+        connect: _ingredients.slice(15, 30),
       },
     },
   });
@@ -148,7 +148,7 @@ async function up() {
       imageUrl: "/Креветка_и_песто.avif",
       categoryId: 1,
       ingredients: {
-        connect: _ingredients.slice(10, 40),
+        connect: _ingredients.slice(20, 40),
       },
     },
   });
@@ -159,7 +159,7 @@ async function up() {
       imageUrl: "/Карбонара.avif",
       categoryId: 1,
       ingredients: {
-        connect: _ingredients.slice(10, 40),
+        connect: _ingredients.slice(10, 30),
       },
     },
   });
@@ -170,7 +170,7 @@ async function up() {
       imageUrl: "/Мясная.avif",
       categoryId: 1,
       ingredients: {
-        connect: _ingredients.slice(10, 40),
+        connect: _ingredients.slice(10, 30),
       },
     },
   });

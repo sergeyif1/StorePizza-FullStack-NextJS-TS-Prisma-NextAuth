@@ -5,9 +5,9 @@
 @tailwind utilities;
 
 
-html {
+/* html {
   scroll-behavior: smooth;
-}
+} */
 
 
 @media (prefers-reduced-motion: reduce) {
