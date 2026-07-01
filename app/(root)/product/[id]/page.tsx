@@ -3,16 +3,18 @@ import {
   ProductImage,
   Title,
 } from "@/shared/components/shared/index";
-import { GroupVariats } from "@/shared/components/shared/group variats";
+import { GroupVariats } from "@/shared/components/shared/group-variats";
 import { prisma } from "@/prisma/prisma-client";
 import { notFound } from "next/navigation";
 
 interface ProductPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const productId = parseInt(params.id, 10);
+  const { id } = await params;
+
+  const productId = parseInt(id, 10);
 
   if (isNaN(productId) || productId <= 0) {
     return notFound();
@@ -20,6 +22,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const product = await prisma.product.findUnique({
     where: { id: productId },
+    include: {
+      ingredients: true,
+      items: true,
+    },
   });
 
   if (!product) {

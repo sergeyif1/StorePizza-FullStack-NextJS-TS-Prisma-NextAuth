@@ -17,9 +17,9 @@ import { PizzaSize, PizzaType } from "../constants/pizza";
 export const calcTotalPizzaPrice = (
   type: PizzaType,
   size: PizzaSize,
-  items: ProductItem[],
-  ingredients: Ingredient[],
-  selectedIngredients: Set<number>
+  items: ProductItem[] = [],
+  ingredients: Ingredient[] = [],
+  selectedIngredients: Set<number>,
 ) => {
   const pizzaPrice =
     items.find((item) => item.pizzaType === type && item.size === size)
