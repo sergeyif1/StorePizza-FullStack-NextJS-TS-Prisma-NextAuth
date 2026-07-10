@@ -23,6 +23,7 @@ export { FormInput } from "./form/form-input";
 export { ErrorText } from "./error-text";
 export { RequiredSymbol } from "./required-symbol";
 export { ClearButton } from "./clear-button";
+export { PaymentWidget } from "./checkout/PaymentWidget";
 export * from "./email-temapltes";
 export * from "./checkout";
 export * from "./modals";

@@ -1,122 +1,187 @@
-// =====================
-// Common primitives
-// =====================
+// ================================
+// Payment lifecycle status
+// ================================
 
-export type Currency = "UAH";
+// export type PaymentStatus = "PENDING" | "PAID" | "DECLINED";
+export type PaymentStatus = "Approved" | "Declined" | "Pending";
 
-export interface Money {
-  value: string;
-  currency: Currency;
+// ================================
+// Widget config
+// Данные для wayforpay.run()
+// Server -> React -> Widget
+// ================================
+
+export interface WayForPayPaymentConfig {
+  merchantAccount: string;
+  merchantDomainName: string;
+
+  merchantAuthType: "SimpleSignature";
+  merchantTransactionType: "SALE";
+  merchantTransactionSecureType: "AUTO";
+
+  merchantSignature: string;
+
+  orderReference: string;
+  orderDate: number;
+
+  amount: number;
+  currency: "UAH";
+
+  productName: string[];
+  productPrice: string[];
+  productCount: string[];
+
+  clientFirstName: string;
+  clientLastName: string;
+  clientEmail: string;
+  clientPhone: string;
+
+  language: "UA";
+
+  serviceUrl?: string;
 }
 
-export interface Recipient {
-  account_id: string;
-  gateway_id: string;
+// ================================
+// Widget response
+// Ответ внутри браузера
+// wayforpay.run()
+// ================================
+
+// export interface WayForPayPaymentResult {
+//   merchantAccount: string;
+
+//   merchantSignature: string;
+
+//   orderReference: string;
+
+//   amount: number;
+
+//   currency: "UAH";
+
+//   authCode: string;
+
+//   transactionStatus: "Approved" | "Declined" | "Pending";
+
+//   reason: string;
+
+//   reasonCode: number;
+
+//   createdDate: number;
+
+//   processingDate: number;
+
+//   cardPan?: string;
+
+//   cardType?: string;
+
+//   email?: string;
+
+//   phone?: string;
+
+//   paymentSystem?: string;
+
+//   fee?: number;
+// }
+
+export interface WayForPayPaymentResult {
+  merchantAccount: string;
+  merchantSignature: string;
+
+  orderReference: string;
+
+  amount: number;
+  currency: string;
+
+  transactionStatus: PaymentStatus;
+
+  reason?: string;
+  reasonCode?: number;
+
+  authCode?: string;
+
+  cardPan?: string;
+  cardType?: string;
+
+  email?: string;
+  phone?: string;
 }
 
-export interface Confirmation {
-  type: string;
-  confirmation_url: string;
+// ================================
+// Server callback
+// WayForPay -> Next.js API route
+// /api/payment/callback
+// ================================
+
+export interface PaymentCallbackData {
+  merchantAccount: string;
+
+  orderReference: string;
+
+  merchantSignature: string;
+
+  amount: number;
+
+  currency: string;
+
+  transactionStatus: PaymentStatus;
+
+  authCode?: string;
+
+  email?: string;
+
+  phone?: string;
+
+  createdDate?: number;
+
+  processingDate?: number;
+
+  reason?: string;
+
+  reasonCode?: number;
+
+  cardPan?: string;
+
+  cardType?: string;
 }
 
-export interface Metadata {
-  order_id: string;
-}
+// export interface PaymentCallbackData {
+//   merchantAccount: string;
 
-// =====================
-// Payment status model
-// =====================
+//   merchantSignature: string;
 
-export type PaymentStatus = "Approved" | "Pending" | "Declined" | "Refund";
+//   orderReference: string;
 
-// =====================
-// Payment (API response)
-// =====================
+//   amount: number;
 
-export interface PaymentData {
-  id: string;
-  status: PaymentStatus;
-  amount: Money;
-  description: string;
+//   currency: "UAH";
 
-  recipient: Recipient;
+//   authCode: string;
 
-  created_at: string;
+//   transactionStatus: "Approved" | "Declined" | "Pending";
 
-  confirmation: Confirmation;
+//   reason: string;
 
-  test: boolean;
-  paid: boolean;
+//   reasonCode: number;
 
-  refundable: boolean;
+//   createdDate: number;
 
-  metadata: Metadata;
-}
+//   processingDate: number;
 
-// =====================
-// Callback types
-// =====================
+//   cardPan?: string;
 
-export type CallbackEvent =
-  | "Approved"
-  | "Pending"
-  | "Declined"
-  | "Refund"
-  | "Check status";
+//   cardType?: string;
 
-export type PaymentCallbackData = {
-  type: string;
-  event: CallbackEvent;
+//   email?: string;
 
-  object: PaymentObject;
-};
+//   phone?: string;
 
-// =====================
-// Callback object
-// =====================
+//   paymentSystem?: string;
 
-export interface PaymentObject {
-  id: string;
-  status: PaymentStatus;
+//   fee?: number;
 
-  amount: Money;
+//   issuerBankCountry?: string;
 
-  income_amount: Money;
+//   issuerBankName?: string;
 
-  description: string;
-
-  recipient: Recipient;
-
-  payment_method: PaymentMethod;
-
-  captured_at: string;
-  created_at: string;
-
-  test: boolean;
-
-  refunded_amount: Money;
-
-  paid: boolean;
-
-  refundable: boolean;
-
-  metadata: Metadata;
-
-  authorization_details: AuthorizationDetails;
-}
-
-// =====================
-// Nested objects
-// =====================
-
-export interface PaymentMethod {
-  type: string;
-  id: string;
-  saved: boolean;
-  title: string;
-}
-
-export interface AuthorizationDetails {
-  rrn: string;
-  auth_code: string;
-}
+//   recToken?: string;
+// }

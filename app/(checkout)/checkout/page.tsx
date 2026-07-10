@@ -9,13 +9,26 @@ import {
   CheckoutAdressForm,
   CheckoutCart,
   CheckoutPersonalForm,
+  PaymentWidget,
 } from "@/shared/components/shared/checkout";
 import { CheckoutFormValues, checkoutFormSchema } from "@/shared/constants";
 import toast from "react-hot-toast";
 import { createOrder } from "@/app/api/actions";
+import { WayForPayPaymentConfig } from "@/@types/WayForPay";
+import {
+  CheckoutPaymentDialog,
+  CheckoutPaymentStatus,
+} from "@/shared/components/shared/checkout/CheckoutPaymentDialog";
 
 export default function CheckoutPage() {
+  const [paymentStatus, setPaymentStatus] =
+    React.useState<CheckoutPaymentStatus>(null);
+
+  const [paymentConfig, setPaymentConfig] =
+    React.useState<WayForPayPaymentConfig | null>(null);
+
   const [submitting, setSubmitting] = React.useState(false);
+
   const { totalAmount, updateItemQuantity, items, removeCartItem, loading } =
     useCart();
 
@@ -34,14 +47,22 @@ export default function CheckoutPage() {
   const onSubmit = async (data: CheckoutFormValues) => {
     try {
       setSubmitting(true);
-      await createOrder(data);
 
-      toast.success(
-        "Замовлення успішно варіфіковано! 🍕🧩 Перехід на розрахунок",
-        { icon: "✅" },
-      );
+      const result = await createOrder(data);
+
+      if (!result || !result.paymentConfig) {
+        toast.error("Payment init failed");
+        return;
+      }
+
+      setPaymentConfig(result.paymentConfig);
+
+      // toast.success("Замовлення успішно створено! 🍕🧩 Перехід до оплати", {
+      //   icon: "✅",
+      // });
     } catch (err) {
-      console.log(err);
+      console.error(err);
+
       toast.error("Не вдалося створити замовлення", {
         icon: "❌",
       });
@@ -94,6 +115,19 @@ export default function CheckoutPage() {
           </div>
         </form>
       </FormProvider>
+
+      <CheckoutPaymentDialog
+        open={paymentStatus !== null}
+        status={paymentStatus}
+        onClose={() => setPaymentStatus(null)}
+      />
+
+      <PaymentWidget
+        paymentConfig={paymentConfig}
+        onApproved={() => setPaymentStatus("approved")}
+        onDeclined={() => setPaymentStatus("declined")}
+        onPending={() => setPaymentStatus("pending")}
+      />
     </Container>
   );
 }

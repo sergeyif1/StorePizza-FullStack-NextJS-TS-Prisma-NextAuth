@@ -1,38 +1,86 @@
-import { PaymentData } from "@/@types/WayForPay";
-import axios from "axios";
+import { WayForPayPaymentConfig } from "@/@types/WayForPay";
 import CryptoJS from "crypto-js";
 
-interface Props {
-  description: string;
+// =====================
+// Types
+// =====================
+
+interface CreatePaymentProps {
   orderId: number;
   amount: number;
+  description: string;
+
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+
+  address?: string;
+  comment?: string;
 }
 
-export async function createPayment(details: Props) {
+// =====================
+// Payment builder
+// =====================
+
+export function createPayment(
+  details: CreatePaymentProps,
+): WayForPayPaymentConfig {
+  const merchantAccount = process.env.WFP_MERCHANT_ACCOUNT;
+  const merchantDomainName = process.env.NEXT_PUBLIC_APP_URL;
+  const secretKey = process.env.WFP_SECRET_KEY;
+
+  if (!merchantAccount || !merchantDomainName || !secretKey) {
+    throw new Error("WayForPay environment variables are not configured");
+  }
+
   const orderDate = Math.floor(Date.now() / 1000);
 
   const payload = {
-    merchantAccount: "WFP_DOMAIN",
+    merchantAccount,
+    merchantDomainName,
+
+    merchantAuthType: "SimpleSignature" as const,
+    merchantTransactionType: "SALE" as const,
+    merchantTransactionSecureType: "AUTO" as const,
+
     orderReference: String(details.orderId),
     orderDate,
+
     amount: details.amount,
-    currency: "UAH",
+    currency: "UAH" as const,
 
     productName: [details.description],
-    productPrice: [details.amount],
-    productCount: [1],
+    productPrice: [String(details.amount)],
+    productCount: ["1"],
 
-    capture: true,
+    // =====================
+    // Customer
+    // =====================
 
-    description: details.description,
+    clientFirstName: details.firstName,
+    clientLastName: details.lastName,
+    clientEmail: details.email,
+    clientPhone: details.phone,
 
-    metadata: {
-      order_id: details.orderId,
-    },
+    // =====================
+    // Widget
+    // =====================
+
+    language: "UA" as const,
+
+    // Будут подключены позже
+    // returnUrl: process.env.WFP_RETURN_URL,
+    serviceUrl: process.env.WFP_SERVICE_URL,
   };
+
+  // =====================
+  // Signature
+  // =====================
 
   const signatureString = [
     payload.merchantAccount,
+    payload.merchantDomainName,
     payload.orderReference,
     payload.orderDate,
     payload.amount,
@@ -42,20 +90,17 @@ export async function createPayment(details: Props) {
     payload.productPrice.join(";"),
   ].join(";");
 
-  const signature = CryptoJS.HmacMD5(
+  const merchantSignature = CryptoJS.HmacMD5(
     signatureString,
-    "WFP_SECRET_KEY",
+    secretKey,
   ).toString();
 
-  const { data } = await axios.post<PaymentData>(
-    "https://api.wayforpay.com/api",
-    {
-      ...payload,
-      signature,
-    },
-  );
+  // =====================
+  // Widget configuration
+  // =====================
 
-  console.log("WAYFORPAY RESPONSE:", JSON.stringify(data, null, 2));
-
-  return data;
+  return {
+    ...payload,
+    merchantSignature,
+  };
 }
