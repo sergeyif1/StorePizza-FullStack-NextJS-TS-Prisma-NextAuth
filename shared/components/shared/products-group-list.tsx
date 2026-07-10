@@ -33,11 +33,11 @@ export const ProductsGroupList: React.FC<Props> = ({
     threshold: 0.4,
   });
 
-  console.log("Category:", title);
-  console.log(
-    "Product IDs:",
-    items.map((p) => p.id),
-  );
+  // console.log("Category:", title);
+  // console.log(
+  //   "Product IDs:",
+  //   items.map((p) => p.id),
+  // );
 
   React.useEffect(() => {
     if (intersection?.isIntersecting) {
