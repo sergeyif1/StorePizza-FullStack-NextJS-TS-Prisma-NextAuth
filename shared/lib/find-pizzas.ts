@@ -57,13 +57,13 @@ export const findPizzas = async (params: GetSearchParams) => {
   const minPrice = params.priceFrom ? Number(params.priceFrom) : null;
   const maxPrice = params.priceTo ? Number(params.priceTo) : null;
 
-  console.log("=== FILTER PARAMS ===", {
-    sizes,
-    pizzaTypes,
-    ingredientsIdArr,
-    minPrice,
-    maxPrice,
-  });
+  // console.log("=== FILTER PARAMS ===", {
+  //   sizes,
+  //   pizzaTypes,
+  //   ingredientsIdArr,
+  //   minPrice,
+  //   maxPrice,
+  // });
 
   const categories = await prisma.category.findMany({
     include: {
@@ -120,12 +120,12 @@ export const findPizzas = async (params: GetSearchParams) => {
         })
         .filter((p): p is NonNullable<typeof p> => p !== null);
 
-      console.log(
-        "Category:",
-        category.name,
-        "\nProduct IDs:",
-        products.map((p) => p.id),
-      );
+      // console.log(
+      //   "Category:",
+      //   category.name,
+      //   "\nProduct IDs:",
+      //   products.map((p) => p.id),
+      // );
 
       return {
         ...category,

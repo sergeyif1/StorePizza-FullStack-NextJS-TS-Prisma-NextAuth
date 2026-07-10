@@ -19,11 +19,4 @@ export const sendEmail = async (
   }
 
   return data;
-
-  // try {
-
-  // } catch (err) {
-  //   console.error("[sendEmail] error:", err);
-  //   throw err;
-  // }
 };
