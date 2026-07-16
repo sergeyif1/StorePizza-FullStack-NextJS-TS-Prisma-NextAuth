@@ -1,13 +1,15 @@
+import React from "react";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/prisma/prisma-client";
 import { OrderStatus } from "@prisma/client";
 import { PaymentCallbackData } from "@/@types/WayForPay";
+import { sendEmail } from "@/shared/lib";
+import { PayOrderTemplate } from "@/shared/components/shared/email-temapltes/pay-order";
+import { mapOrderToEmail } from "@/shared/lib/order/map-order-to-email";
 
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as PaymentCallbackData;
-
-    // console.log("[WayForPay] Callback:", JSON.stringify(body, null, 2));
 
     const orderId = Number(body.orderReference);
 
@@ -39,11 +41,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // =====================================
-    // TODO:
-    // Проверка merchantSignature
-    // =====================================
-
     let newStatus: OrderStatus;
 
     switch (body.transactionStatus) {
@@ -60,10 +57,6 @@ export async function POST(req: NextRequest) {
         break;
 
       default:
-        // // console.warn(
-        //   `[WayForPay] Unknown transactionStatus: ${body.transactionStatus}`,
-        // );
-
         return NextResponse.json(
           {
             error: "Unknown transaction status",
@@ -74,48 +67,51 @@ export async function POST(req: NextRequest) {
         );
     }
 
-    // console.log("[WayForPay] BEFORE UPDATE", {
-    //   orderId: order.id,
-    //   oldStatus: order.status,
-    //   newStatus,
-    // });
-
     // =====================================
-    // Идемпотентность
+    // Защита от повторного COMPLETED
     // =====================================
 
-    if (order.status === newStatus) {
-      // console.log(
-      //   `[WayForPay] Order ${order.id} already has status ${order.status}`,
-      // );
-
+    if (
+      order.status === OrderStatus.COMPLETED &&
+      newStatus === OrderStatus.COMPLETED
+    ) {
       return NextResponse.json({
         ok: true,
       });
     }
 
-    await prisma.order.update({
+    // =====================================
+    // Update Order
+    // =====================================
+
+    const updatedOrder = await prisma.order.update({
       where: {
         id: order.id,
       },
+
       data: {
         status: newStatus,
-
-        // Позже заменить на transactionId,
-        // если WayForPay его предоставляет.
         paymentId: body.authCode || null,
       },
     });
 
-    // const updatedOrder = await prisma.order.findUnique({
-    //   where: {
-    //     id: order.id,
-    //   },
-    // });
+    // =====================================
+    // Email
+    // =====================================
 
-    // console.log("[WayForPay] AFTER UPDATE", updatedOrder);
+    if (order.status !== newStatus) {
+      const emailData = mapOrderToEmail(updatedOrder);
 
-    // console.log(`[WayForPay] Order ${order.id} → ${updatedOrder?.status}`);
+      await sendEmail(
+        updatedOrder.email,
+        `Next Pizza / Замовлення №${updatedOrder.id}`,
+        React.createElement(PayOrderTemplate, {
+          data: emailData,
+        }),
+      );
+    }
+
+    console.log(`[Payment] Order ${updatedOrder.id} → ${updatedOrder.status}`);
 
     return NextResponse.json({
       ok: true,

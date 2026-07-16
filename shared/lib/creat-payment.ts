@@ -1,5 +1,6 @@
 import { WayForPayPaymentConfig } from "@/@types/WayForPay";
 import CryptoJS from "crypto-js";
+import { calculateOrderPrices } from "./order/calculate-order";
 
 // =====================
 // Types
@@ -7,16 +8,13 @@ import CryptoJS from "crypto-js";
 
 interface CreatePaymentProps {
   orderId: number;
-  amount: number;
+  subtotal: number;
   description: string;
 
   firstName: string;
   lastName: string;
   phone: string;
   email: string;
-
-  address?: string;
-  comment?: string;
 }
 
 // =====================
@@ -36,6 +34,8 @@ export function createPayment(
 
   const orderDate = Math.floor(Date.now() / 1000);
 
+  const prices = calculateOrderPrices(details.subtotal);
+
   const payload = {
     merchantAccount,
     merchantDomainName,
@@ -47,11 +47,11 @@ export function createPayment(
     orderReference: String(details.orderId),
     orderDate,
 
-    amount: details.amount,
+    amount: prices.totalPrice,
     currency: "UAH" as const,
 
     productName: [details.description],
-    productPrice: [String(details.amount)],
+    productPrice: [String(prices.totalPrice)],
     productCount: ["1"],
 
     // =====================

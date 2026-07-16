@@ -4,9 +4,7 @@ import { CheckoutItemDetails } from "./checkout-item-details";
 import { ArrowRight, Package, Percent, Truck } from "lucide-react";
 import { Button, Skeleton } from "../ui";
 import { cn } from "@/shared/lib/utils";
-
-const VAT = 20;
-const DELIVERY_PRICE = 250;
+import { calculateOrderPrices } from "@/shared/lib/order/calculate-order";
 
 interface Props {
   totalAmount: number;
@@ -19,8 +17,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
   loading,
   className,
 }) => {
-  const vatPrice = (totalAmount * VAT) / 100;
-  const totalPrice = totalAmount + vatPrice + DELIVERY_PRICE;
+  const prices = calculateOrderPrices(totalAmount);
 
   return (
     <WhiteBlock className={cn("p-6 sticky top-4", className)}>
@@ -29,7 +26,9 @@ export const CheckoutSidebar: React.FC<Props> = ({
         {loading ? (
           <Skeleton className="h-11 w-48" />
         ) : (
-          <span className="text-[34px] font-extrabold">{totalPrice} ₴</span>
+          <span className="text-[34px] font-extrabold">
+            {prices.totalPrice} ₴
+          </span>
         )}
       </div>
 
@@ -59,7 +58,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
           loading ? (
             <Skeleton className="h-6 w-16 rounded-[6px]" />
           ) : (
-            `${vatPrice.toFixed(2)}`
+            `${prices.vatPrice}`
           )
         }
       />
@@ -74,7 +73,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
           loading ? (
             <Skeleton className="h-6 w-16 rounded-[6px]" />
           ) : (
-            `${DELIVERY_PRICE}`
+            `${prices.deliveryPrice}`
           )
         }
       />

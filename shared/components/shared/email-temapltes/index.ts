@@ -1,1 +1,1 @@
-export { PayOrderTemplate } from './pay-order';
+export { PayOrderTemplate } from "./pay-order";

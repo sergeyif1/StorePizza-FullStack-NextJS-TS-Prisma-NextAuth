@@ -10,12 +10,3 @@ export const calcCartItemTotalPrice = (item: CartItemDTO): number => {
 
   return (ingredientsPrice + productPrice) * item.quantity;
 };
-
-// export const calcCartItemTotalPrice = (item: CartItemDTO): number => {
-//   const ingredientsPrice = item.ingredients?.reduce(
-//     (acc: number, ingredient) => acc + ingredient.price,
-//     0,
-//   );
-
-//   return (ingredientsPrice + item.productItem.price) * item.quantity;
-// };
