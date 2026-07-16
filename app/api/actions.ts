@@ -5,7 +5,6 @@ import { CheckoutFormValues } from "@/shared/constants";
 import { OrderStatus } from "@prisma/client";
 import { cookies } from "next/headers";
 import { createPayment, sendEmail } from "@/shared/lib";
-import { PayOrderTemplate } from "@/shared/components/shared/email-temapltes/pay-order";
 import { CreateOrderResult } from "@/@types/Checkout";
 
 export async function createOrder(
@@ -97,7 +96,7 @@ export async function createOrder(
 
     const paymentConfig = createPayment({
       orderId: order.id,
-      amount: order.totalAmount,
+      subtotal: order.totalAmount,
       description: `Оплата замовлення №${order.id}`,
 
       firstName: data.firstName,
@@ -108,24 +107,6 @@ export async function createOrder(
       address: data.address,
       comment: data.comment,
     });
-
-    // =====================
-    // 6. Email (не должен ломать заказ)
-    // =====================
-
-    try {
-      await sendEmail(
-        data.email,
-        `Next Pizza / Замовлення №${order.id}`,
-        PayOrderTemplate({
-          orderId: order.id,
-          totalAmount: order.totalAmount,
-          paymentUrl: "",
-        }),
-      );
-    } catch (error) {
-      console.error("[CreateOrder] Email error", error);
-    }
 
     // =====================
     // 7. Return

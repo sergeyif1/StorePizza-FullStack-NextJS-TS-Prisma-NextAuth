@@ -23,30 +23,3 @@ export const useCart = (): ReturnProps => {
   return cartState;
 };
 
-// export const useCart = (): ReturnProps => {
-//   const totalAmount = useCartStore((state) => state.totalAmount);
-//   const items = useCartStore((state) => state.items);
-//   const loading = useCartStore((state) => state.loading);
-
-//   const fetchCartItems = useCartStore((state) => state.fetchCartItems);
-
-//   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
-
-//   const removeCartItem = useCartStore((state) => state.removeCartItem);
-
-//   const addCartItem = useCartStore((state) => state.addCartItem);
-
-//   React.useEffect(() => {
-//     fetchCartItems();
-//   }, [fetchCartItems]);
-
-//   return {
-//     totalAmount,
-//     items,
-//     loading,
-//     fetchCartItems,
-//     updateItemQuantity,
-//     removeCartItem,
-//     addCartItem,
-//   };
-// };

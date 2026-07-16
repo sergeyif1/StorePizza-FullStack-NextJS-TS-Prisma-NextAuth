@@ -9,7 +9,8 @@ export const sendEmail = async (
 
   const { data, error } = await resend.emails.send({
     from: "onboarding@resend.dev",
-    to: "sergeyif1@gmail.com",
+    // to: "sergeyif1@gmail.com",
+    to,
     subject,
     react: template,
   });
