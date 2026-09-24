@@ -1,3 +1,4 @@
+import { Providers } from "@/shared/components/shared/providers";
 import "./globals.css";
 import { Nunito } from "next/font/google";
 import { Toaster } from "react-hot-toast";
@@ -21,7 +22,7 @@ export default function RootLayout({
       </head>
 
       <body>
-        {children}
+        <Providers>{children}</Providers>
         <Toaster />
       </body>
     </html>

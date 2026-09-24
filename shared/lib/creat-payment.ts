@@ -28,6 +28,8 @@ export function createPayment(
   const merchantDomainName = process.env.NEXT_PUBLIC_APP_URL;
   const secretKey = process.env.WFP_SECRET_KEY;
 
+  console.log("WAYFORPAY merchantAccount:", merchantAccount);
+
   if (!merchantAccount || !merchantDomainName || !secretKey) {
     throw new Error("WayForPay environment variables are not configured");
   }
@@ -45,6 +47,7 @@ export function createPayment(
     merchantTransactionSecureType: "AUTO" as const,
 
     orderReference: String(details.orderId),
+    // orderReference: `TEST-${details.orderId}-${Date.now()}`,
     orderDate,
 
     amount: prices.totalPrice,
@@ -98,6 +101,19 @@ export function createPayment(
   // =====================
   // Widget configuration
   // =====================
+
+  console.log("=== WAYFORPAY PAYMENT ===");
+  console.log("orderReference:", details.orderId);
+  console.log("orderDate:", orderDate);
+  console.log("amount:", prices.totalPrice);
+  console.log("merchantAccount:", merchantAccount);
+  console.log("=====================");
+  console.log("=== WAYFORPAY CONFIG ===");
+  console.log("merchantAccount:", merchantAccount);
+  console.log("merchantDomainName:", merchantDomainName);
+  console.log("orderReference:", details.orderId);
+  console.log("orderDate:", orderDate);
+  console.log("amount:", prices.totalPrice);
 
   return {
     ...payload,
