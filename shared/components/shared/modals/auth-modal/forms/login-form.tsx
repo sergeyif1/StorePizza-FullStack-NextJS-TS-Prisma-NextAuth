@@ -24,11 +24,10 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
   const onSubmit = async (data: TFormLoginValues) => {
     try {
       const resp = await signIn("credentials", {
-        // ...data,
-        // redirect: false,
+        ...data,
+        redirect: false,
         email: data.email,
         password: data.password,
-        redirect: false,
         callbackUrl: "/",
       });
 

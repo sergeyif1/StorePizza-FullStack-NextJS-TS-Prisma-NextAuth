@@ -122,27 +122,34 @@ model Order {
   user        User?       @relation(fields: [userId], references: [id])
 }
 
+model Story {
+  id              Int    @id @default(autoincrement())
+  previewImageUrl String
+
+  items StoryItem[]
+
+  createdAt DateTime @default(now())
+}
+
+model StoryItem {
+  id Int @id @default(autoincrement())
+
+  storyId Int
+  story   Story @relation(fields: [storyId], references: [id])
+
+  sourceUrl String
+
+  createdAt DateTime @default(now())
+}
+
 model VerificationCode {
   id        Int      @id @default(autoincrement())
   userId    Int      @unique
   code      String   @unique
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
-}
 
-model Story {
-  id              Int         @id @default(autoincrement())
-  previewImageUrl String
-  createdAt       DateTime    @default(now())
-  items           StoryItem[]
-}
-
-model StoryItem {
-  id        Int      @id @default(autoincrement())
-  storyId   Int
-  sourceUrl String
-  createdAt DateTime @default(now())
-  story     Story    @relation(fields: [storyId], references: [id])
+  @@unique([userId, code])
 }
 
 enum OrderStatus {

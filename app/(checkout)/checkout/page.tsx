@@ -19,6 +19,8 @@ import {
   CheckoutPaymentDialog,
   CheckoutPaymentStatus,
 } from "@/shared/components/shared/checkout/CheckoutPaymentDialog";
+import { useSession } from "next-auth/react";
+import { Api } from "@/shared/services/api-client";
 
 export default function CheckoutPage() {
   const [paymentStatus, setPaymentStatus] =
@@ -32,17 +34,34 @@ export default function CheckoutPage() {
   const { totalAmount, updateItemQuantity, items, removeCartItem, loading } =
     useCart();
 
+  const { data: session } = useSession();
+
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
     defaultValues: {
       email: "",
-      firstName: "",
+      firstName: session?.user?.name || "",
       lastName: "",
       phone: "",
       address: "",
       comment: "",
     },
   });
+
+  React.useEffect(() => {
+    async function fetchUserInfo() {
+      const data = await Api.auth.getMe();
+      const [firstName, lastName] = data.fullName.split(" ");
+
+      form.setValue("firstName", firstName);
+      form.setValue("lastName", lastName);
+      form.setValue("email", data.email);
+    }
+
+    if (session) {
+      fetchUserInfo();
+    }
+  }, [session]);
 
   const onSubmit = async (data: CheckoutFormValues) => {
     try {
@@ -100,9 +119,13 @@ export default function CheckoutPage() {
                 loading={loading}
               />
 
-              <CheckoutPersonalForm disabled={loading} />
+              <CheckoutPersonalForm
+                className={loading ? "opacity-40 pointer-events-none" : ""}
+              />
 
-              <CheckoutAdressForm disabled={loading} />
+              <CheckoutAdressForm
+                className={loading ? "opacity-40 pointer-events-none" : ""}
+              />
             </div>
 
             {/* Правая часть */}

@@ -25,9 +25,79 @@ const generateProductItem = ({
   };
 };
 
+const storiesData = [
+  {
+    previewImageUrl: "/promo/1_logo-350x440.webp",
+    items: [
+      "/drive/1_oqx9feuljibke3mknab7ilb35t.webp",
+      "/drive/2_io7c5zarojdm7eus0trn7czdet.webp",
+      "/drive/3_zktyxdxnjqbzufonxd8ffk44cb.webp",
+      "/drive/4_9ufzwtpdjeekidqq04alfnxvu2.webp",
+      "/drive/5_uyqzmdojadcbw7o0a35ojxlcul.webp",
+    ],
+  },
+  {
+    previewImageUrl: "/promo/2_logo-350x440.webp",
+    items: [
+      "/drive/1_oqx9feuljibke3mknab7ilb35t.webp",
+      "/drive/2_io7c5zarojdm7eus0trn7czdet.webp",
+      "/drive/3_zktyxdxnjqbzufonxd8ffk44cb.webp",
+      "/drive/4_9ufzwtpdjeekidqq04alfnxvu2.webp",
+      "/drive/5_uyqzmdojadcbw7o0a35ojxlcul.webp",
+    ],
+  },
+  {
+    previewImageUrl: "/promo/3_logo-350x440.webp",
+    items: [
+      "/drive/1_oqx9feuljibke3mknab7ilb35t.webp",
+      "/drive/2_io7c5zarojdm7eus0trn7czdet.webp",
+      "/drive/3_zktyxdxnjqbzufonxd8ffk44cb.webp",
+      "/drive/4_9ufzwtpdjeekidqq04alfnxvu2.webp",
+      "/drive/5_uyqzmdojadcbw7o0a35ojxlcul.webp",
+    ],
+  },
+  {
+    previewImageUrl: "/promo/4_logo-350x440.webp",
+    items: [
+      "/drive/1_oqx9feuljibke3mknab7ilb35t.webp",
+      "/drive/2_io7c5zarojdm7eus0trn7czdet.webp",
+      "/drive/3_zktyxdxnjqbzufonxd8ffk44cb.webp",
+      "/drive/4_9ufzwtpdjeekidqq04alfnxvu2.webp",
+      "/drive/5_uyqzmdojadcbw7o0a35ojxlcul.webp",
+    ],
+  },
+  {
+    previewImageUrl: "/promo/5_logo-350x440.webp",
+    items: [
+      "/drive/1_oqx9feuljibke3mknab7ilb35t.webp",
+      "/drive/2_io7c5zarojdm7eus0trn7czdet.webp",
+      "/drive/3_zktyxdxnjqbzufonxd8ffk44cb.webp",
+      "/drive/4_9ufzwtpdjeekidqq04alfnxvu2.webp",
+      "/drive/5_uyqzmdojadcbw7o0a35ojxlcul.webp",
+    ],
+  },
+  {
+    previewImageUrl: "/promo/6_logo-350x440.webp",
+    items: [
+      "/drive/1_oqx9feuljibke3mknab7ilb35t.webp",
+      "/drive/2_io7c5zarojdm7eus0trn7czdet.webp",
+      "/drive/3_zktyxdxnjqbzufonxd8ffk44cb.webp",
+      "/drive/4_9ufzwtpdjeekidqq04alfnxvu2.webp",
+      "/drive/5_uyqzmdojadcbw7o0a35ojxlcul.webp",
+    ],
+  },
+];
+
 async function up() {
   await prisma.user.createMany({
     data: [
+      {
+        fullName: "sergeyif",
+        email: "sergeyif1@gmail.com",
+        password: hashSync("22222", 10),
+        verified: new Date(),
+        role: "USER",
+      },
       {
         fullName: "User",
         email: "user@test.com",
@@ -269,9 +339,61 @@ async function up() {
       },
     },
   });
+
+  for (const storyData of storiesData) {
+    await prisma.story.create({
+      data: {
+        previewImageUrl: storyData.previewImageUrl,
+        items: {
+          create: storyData.items.map((sourceUrl) => ({
+            sourceUrl,
+          })),
+        },
+      },
+    });
+  }
+
+  // await prisma.story.createMany({
+  //   data: [
+  //     { previewImageUrl: "/promo/1_logo-350x440.webp" },
+  //     { previewImageUrl: "/promo/2_logo-350x440.webp" },
+  //     { previewImageUrl: "/promo/3_logo-350x440.webp" },
+  //     { previewImageUrl: "/promo/4_logo-350x440.webp" },
+  //     { previewImageUrl: "/promo/5_logo-350x440.webp" },
+  //     { previewImageUrl: "/promo/6_logo-350x440.webp" },
+  //   ],
+  // });
+
+  // await prisma.storyItem.createMany({
+  //   data: [
+  //     {
+  //       storyId: 1,
+  //       sourceUrl: "/drive/1_oqx9feuljibke3mknab7ilb35t.webp",
+  //     },
+  //     {
+  //       storyId: 1,
+  //       sourceUrl: "/drive/2_io7c5zarojdm7eus0trn7czdet.webp",
+  //     },
+  //     {
+  //       storyId: 1,
+  //       sourceUrl: "/drive/3_zktyxdxnjqbzufonxd8ffk44cb.webp",
+  //     },
+  //     {
+  //       storyId: 1,
+  //       sourceUrl: "/drive/4_9ufzwtpdjeekidqq04alfnxvu2.webp",
+  //     },
+  //     {
+  //       storyId: 1,
+  //       sourceUrl: "/drive/5_uyqzmdojadcbw7o0a35ojxlcul.webp",
+  //     },
+  //   ],
+  // });
 }
 
 async function down() {
+  await prisma.$executeRaw`TRUNCATE TABLE "StoryItem" RESTART IDENTITY CASCADE`;
+  await prisma.$executeRaw`TRUNCATE TABLE "Story" RESTART IDENTITY CASCADE`;
+
   await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "Category" RESTART IDENTITY CASCADE`;
   await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE`;

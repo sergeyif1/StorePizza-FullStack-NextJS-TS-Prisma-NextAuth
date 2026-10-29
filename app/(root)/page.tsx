@@ -3,6 +3,7 @@ import {
   Title,
   TopBar,
   Filters,
+  Stories,
 } from "@/shared/components/shared/index";
 import { ProductsGroupList } from "@/shared/components/shared/products-group-list";
 import { Suspense } from "react";
@@ -28,6 +29,8 @@ export default async function Home({
           (category) => category.products.length > 0,
         )}
       />
+
+      <Stories />
 
       <Container className="mt-10 pb-14">
         <div className="flex gap-[80px]">
