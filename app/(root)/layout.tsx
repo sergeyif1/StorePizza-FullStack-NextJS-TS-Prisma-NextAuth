@@ -5,7 +5,7 @@ import ClientLayoutShell from "./ClientLayoutShell";
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  modal?: React.ReactNode;
+  modal: React.ReactNode;
 }
 
 export const metadata: Metadata = {

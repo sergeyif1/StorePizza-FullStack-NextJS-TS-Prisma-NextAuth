@@ -188,12 +188,12 @@ export async function registerUser(body: Prisma.UserCreateInput) {
       throw new Error("Пользователь с такой почтой уже существует");
     }
 
-    const createdUser = prisma.user.create({
+    const createdUser = await prisma.user.create({
       data: {
         fullName: body.fullName,
         email: body.email,
         password: hashSync(body.password, 10),
-        verified: false,
+        verified: null,
       },
     });
 
