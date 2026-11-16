@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import toast from "react-hot-toast";
 import { ProfileButton } from "./profile-button";
 import { AuthModal } from "./modals/auth-modal";
@@ -21,15 +22,8 @@ interface Props {
   className?: string;
 }
 
-export const Header: React.FC<Props> = ({
-  hasSearch = true,
-  hasCart = true,
-  className,
-}) => {
+const SearchParamsToast = () => {
   const router = useRouter();
-  const [openAuthModal, setOpenAuthModal] = React.useState(false);
-  const { data: session } = useSession();
-
   const searchParams = useSearchParams();
 
   React.useEffect(() => {
@@ -43,18 +37,53 @@ export const Header: React.FC<Props> = ({
       toastMessage = "Почта успешно подтверждена!";
     }
 
-    if (toastMessage) {
-      setTimeout(() => {
-        router.replace("/");
-        toast.success(toastMessage, {
-          duration: 3000,
-        });
-      }, 1000);
-    }
-  }, []);
+    if (!toastMessage) return;
+
+    const timeout = window.setTimeout(() => {
+      router.replace("/");
+      toast.success(toastMessage, { duration: 3000 });
+    }, 1000);
+
+    return () => window.clearTimeout(timeout);
+  }, [router, searchParams]);
+
+  return null;
+};
+
+export const Header: React.FC<Props> = ({
+  hasSearch = true,
+  hasCart = true,
+  className,
+}) => {
+  const [openAuthModal, setOpenAuthModal] = React.useState(false);
+  const { data: session } = useSession();
+
+  // React.useEffect(() => {
+  //   let toastMessage = "";
+
+  //   if (searchParams.has("paid")) {
+  //     toastMessage = "Заказ успешно оплачен! Информация отправлена на почту.";
+  //   }
+
+  //   if (searchParams.has("verified")) {
+  //     toastMessage = "Почта успешно подтверждена!";
+  //   }
+
+  //   if (toastMessage) {
+  //     setTimeout(() => {
+  //       router.replace("/");
+  //       toast.success(toastMessage, {
+  //         duration: 3000,
+  //       });
+  //     }, 1000);
+  //   }
+  // }, []);
 
   return (
     <header className={className}>
+      <Suspense fallback={null}>
+        <SearchParamsToast />
+      </Suspense>
       <Container className="flex item-container justify-between py-8">
         {/* Левая часть */}
         <Link href="/">

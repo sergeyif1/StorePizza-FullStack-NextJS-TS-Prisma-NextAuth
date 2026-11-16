@@ -48,20 +48,22 @@ export default function CheckoutPage() {
     },
   });
 
+  const { setValue } = form;
+
   React.useEffect(() => {
     async function fetchUserInfo() {
       const data = await Api.auth.getMe();
       const [firstName, lastName] = data.fullName.split(" ");
 
-      form.setValue("firstName", firstName);
-      form.setValue("lastName", lastName);
-      form.setValue("email", data.email);
+      setValue("firstName", firstName);
+      setValue("lastName", lastName);
+      setValue("email", data.email);
     }
 
     if (session) {
       fetchUserInfo();
     }
-  }, [session]);
+  }, [session, setValue]);
 
   const onSubmit = async (data: CheckoutFormValues) => {
     try {
